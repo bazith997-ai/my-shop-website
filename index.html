@@ -4,10 +4,278 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Shop</title>
+
+    <title>Miniature World | Die-Cast Cars & Mini Toys</title>
+
+    <meta name="description" content="Discover premium die-cast miniature cars, supercars and mini toys at Miniature World.">
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        body {
+            background: #0b0b0d;
+            color: #ffffff;
+        }
+
+        header {
+            background: #111113;
+            border-bottom: 1px solid #292929;
+        }
+
+        .logo span {
+            color: #e5a928;
+        }
+
+        nav a:hover {
+            color: #e5a928;
+        }
+
+        .hero {
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(0,0,0,0.95),
+                    rgba(0,0,0,0.55)
+                ),
+                url("https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1600")
+                center/cover;
+            padding: 110px 20px;
+            text-align: left;
+        }
+
+        .hero h1 {
+            font-size: 46px;
+            max-width: 650px;
+        }
+
+        .hero h1 span {
+            color: #e5a928;
+        }
+
+        .hero p {
+            max-width: 500px;
+            line-height: 1.8;
+        }
+
+        .shop-button {
+            background: #e5a928;
+            color: #111;
+        }
+
+        .section {
+            background: #0b0b0d;
+        }
+
+        .section h2 {
+            color: #ffffff;
+        }
+
+        .product-card {
+            background: #171719;
+            border: 1px solid #303033;
+            color: white;
+        }
+
+        .product-card img {
+            background: #222225;
+        }
+
+        .product-info h3 {
+            color: white;
+        }
+
+        .price {
+            color: #e5a928;
+        }
+
+        .add-cart {
+            background: #e5a928;
+            color: #111;
+            font-weight: bold;
+        }
+
+        .add-cart:hover {
+            background: #ffc94d;
+        }
+
+        .cart-section {
+            background: #171719;
+            padding: 35px 7%;
+            border-top: 1px solid #303033;
+        }
+
+        .cart-section h2 {
+            margin-bottom: 20px;
+        }
+
+        #cart-items p {
+            padding: 10px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        #cart-items button {
+            margin-left: 10px;
+            cursor: pointer;
+            padding: 5px 10px;
+        }
+
+        .cart-total {
+            color: #e5a928;
+            font-size: 22px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .checkout-button {
+            background: #25D366;
+            border: none;
+            color: #111;
+            font-weight: bold;
+            padding: 13px 22px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .about {
+            padding: 50px 7%;
+            text-align: center;
+            background: #111113;
+            line-height: 1.8;
+        }
+
+        .about h2 {
+            margin-bottom: 15px;
+        }
+
+        footer {
+            background: #080809;
+            border-top: 1px solid #303033;
+        }
+
+        @media(max-width: 600px) {
+            .hero {
+                padding: 75px 20px;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+        }
+    </style>
 </head>
+
 <body>
-    <h1>Welcome to My Shop!</h1>
-    <p>Your online shopping destination.</p>
+
+    <!-- HEADER -->
+
+    <header>
+        <div class="logo">
+            MINIATURE <span>WORLD</span>
+        </div>
+
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#products">Products</a>
+            <a href="#about">About</a>
+            <a href="#cart">Cart 🛒 (<span id="cart-count">0</span>)</a>
+        </nav>
+    </header>
+
+
+    <!-- HERO SECTION -->
+
+    <section class="hero" id="home">
+
+        <h1>
+            SMALL CARS.<br>
+            <span>BIG PASSION.</span>
+        </h1>
+
+        <p>
+            Explore our collection of die-cast miniature cars,
+            supercars, racing cars and mini toys.
+            Find your next favourite collectible!
+        </p>
+
+        <a href="#products" class="shop-button">
+            EXPLORE COLLECTION
+        </a>
+
+    </section>
+
+
+    <!-- PRODUCTS SECTION -->
+
+    <section class="section" id="products">
+
+        <h2>OUR COLLECTION</h2>
+
+        <div class="product-grid" id="product-list">
+
+            <!-- Products are loaded using script.js -->
+
+        </div>
+
+    </section>
+
+
+    <!-- SHOPPING CART -->
+
+    <section class="cart-section" id="cart">
+
+        <h2>YOUR SHOPPING CART 🛒</h2>
+
+        <div id="cart-items">
+            <p>Your cart is empty.</p>
+        </div>
+
+        <div class="cart-total">
+            Total: <span id="cart-total">₹0</span>
+        </div>
+
+        <button class="checkout-button" onclick="placeOrder()">
+            ORDER VIA WHATSAPP
+        </button>
+
+    </section>
+
+
+    <!-- ABOUT SECTION -->
+
+    <section class="about" id="about">
+
+        <h2>ABOUT MINIATURE WORLD</h2>
+
+        <p>
+            Welcome to Miniature World!
+
+            Your destination for die-cast miniature cars,
+            collectible models and mini toys.
+
+            Discover your passion for miniature vehicles
+            and build your dream collection with us.
+        </p>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <h3>MINIATURE <span>WORLD</span></h3>
+
+        <p>Die-Cast Cars | Mini Toys | Collectibles</p>
+
+        <p>© 2026 Miniature World. All Rights Reserved.</p>
+
+    </footer>
+
+
+    <!-- JAVASCRIPT -->
+
+    <script src="script.js"></script>
+
 </body>
 </html>
