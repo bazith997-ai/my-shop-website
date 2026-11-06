@@ -9,7 +9,7 @@ const products = [
         name: "Zoomers Blackdog 1:64 Die-Cast Metal Muscle Car",
         price: 149,
         category: "Die-Cast Cars",
-        image: "images/dodge-black.jpg",
+        image: "dodge-black.jpg",
         description: "Vintage Racing Scale Model Toy Car - Black"
     }
 ];
