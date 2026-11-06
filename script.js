@@ -1,187 +1,179 @@
 
-// ========================================
-// MINIATURE WORLD - COMPLETE STORE SYSTEM
-// ========================================
+// ==========================================
+// MINIATURE WORLD - PRODUCT DATABASE
+// ==========================================
 
-// ========================================
-// 1. SHOP CONFIGURATION
-// ========================================
+const products = [
+    {
+        id: 1,
+        name: "Zoomers Blackdog 1:64 Die-Cast Metal Muscle Car",
+        price: 149,
+        category: "Die-Cast Cars",
+        image: "images/dodge-black.jpg",
+        description: "Vintage Racing Scale Model Toy Car - Black"
+    }
+];
 
-// Replace this with your WhatsApp business number.
-// Include country code. Example: 919876543210
+// ==========================================
+// WHATSAPP CONFIGURATION
+// ==========================================
+
+// Replace with your WhatsApp number.
+// India format: 91 followed by your 10-digit mobile number.
+// Example: 919876543210
 
 const SHOP_WHATSAPP_NUMBER = "91XXXXXXXXXX";
 
 
-// ========================================
-// 2. PRODUCT DATABASE
-// ========================================
-
-// These are demonstration products.
-// Update product names, prices and images
-// with your actual inventory before launch.
-
-const products = [
-
-    {
-        id: 1,
-        name: "Mini Sports Car",
-        category: "Sports Cars",
-        price: 299,
-        image: "https://placehold.co/500x350/222225/e5a928?text=Mini+Sports+Car"
-    },
-
-    {
-        id: 2,
-        name: "Mini Supercar",
-        category: "Supercars",
-        price: 399,
-        image: "https://placehold.co/500x350/222225/e5a928?text=Mini+Supercar"
-    },
-
-    {
-        id: 3,
-        name: "Die Cast Racing Car",
-        category: "Die-Cast Cars",
-        price: 249,
-        image: "https://placehold.co/500x350/222225/e5a928?text=Racing+Car"
-    },
-
-    {
-        id: 4,
-        name: "Mini Toy Car",
-        category: "Mini Toys",
-        price: 199,
-        image: "https://placehold.co/500x350/222225/e5a928?text=Toy+Car"
-    },
-
-    {
-        id: 5,
-        name: "Classic Die Cast Car",
-        category: "Die-Cast Cars",
-        price: 349,
-        image: "https://placehold.co/500x350/222225/e5a928?text=Classic+Car"
-    },
-
-    {
-        id: 6,
-        name: "Mini Luxury Car",
-        category: "Supercars",
-        price: 499,
-        image: "https://placehold.co/500x350/222225/e5a928?text=Luxury+Car"
-    },
-
-    {
-        id: 7,
-        name: "Mini Racing Model",
-        category: "Sports Cars",
-        price: 299,
-        image: "https://placehold.co/500x350/222225/e5a928?text=Racing+Model"
-    },
-
-    {
-        id: 8,
-        name: "Mini Toy Collection",
-        category: "Mini Toys",
-        price: 199,
-        image: "https://placehold.co/500x350/222225/e5a928?text=Toy+Collection"
-    }
-
-];
-
-
-// ========================================
-// 3. SHOPPING CART
-// ========================================
+// ==========================================
+// SHOPPING CART
+// ==========================================
 
 let cart = [];
 
 
-// ========================================
-// 4. DISPLAY PRODUCTS
-// ========================================
+// ==========================================
+// DISPLAY PRODUCTS
+// ==========================================
 
-function displayProducts() {
+function displayProducts(productList = products) {
 
-    const container = document.getElementById("product-list");
-
-    const searchInput = document.getElementById("product-search");
-
-    const categoryFilter = document.getElementById("category-filter");
-
+    const productContainer = document.getElementById("product-list");
     const noProducts = document.getElementById("no-products");
 
-    if (!container) return;
+    if (!productContainer) return;
 
-    const searchText = searchInput.value.toLowerCase().trim();
+    productContainer.innerHTML = "";
 
-    const selectedCategory = categoryFilter.value;
+    if (productList.length === 0) {
+        if (noProducts) {
+            noProducts.style.display = "block";
+        }
+        return;
+    }
 
-    const filteredProducts = products.filter(product => {
+    if (noProducts) {
+        noProducts.style.display = "none";
+    }
 
-        const matchesSearch =
-            product.name.toLowerCase().includes(searchText) ||
-            product.category.toLowerCase().includes(searchText);
+    productList.forEach(product => {
 
-        const matchesCategory =
-            selectedCategory === "All" ||
-            product.category === selectedCategory;
+        const productCard = document.createElement("div");
+        productCard.className = "product-card";
 
-        return matchesSearch && matchesCategory;
-
-    });
-
-    container.innerHTML = filteredProducts.map(product => `
-
-        <div class="product-card">
-
+        productCard.innerHTML = `
             <img
                 src="${product.image}"
                 alt="${product.name}"
-                loading="lazy"
+                class="product-image"
+                onerror="this.src='https://placehold.co/400x400/222222/ffffff?text=Image+Unavailable'"
             >
 
             <div class="product-info">
+                <h3>${product.name}</h3>
+
+                <p class="product-description">
+                    ${product.description}
+                </p>
 
                 <p class="product-category">
                     ${product.category}
                 </p>
 
-                <h3>${product.name}</h3>
+                <div class="product-bottom">
+                    <span class="product-price">
+                        ₹${product.price}
+                    </span>
 
-                <p class="price">
-                    ₹${product.price}
-                </p>
-
-                <button
-                    class="add-cart"
-                    onclick="addToCart(${product.id})"
-                >
-                    ADD TO CART
-                </button>
-
+                    <button
+                        class="add-to-cart-btn"
+                        onclick="addToCart(${product.id})"
+                    >
+                        Add to Cart
+                    </button>
+                </div>
             </div>
+        `;
 
-        </div>
+        productContainer.appendChild(productCard);
 
-    `).join("");
-
-    noProducts.hidden = filteredProducts.length !== 0;
-
+    });
 }
 
 
-// ========================================
-// 5. ADD TO CART
-// ========================================
+// ==========================================
+// SEARCH PRODUCTS
+// ==========================================
 
-function addToCart(id) {
+function searchProducts() {
 
-    const product = products.find(item => item.id === id);
+    const searchInput = document.getElementById("product-search");
+
+    if (!searchInput) return;
+
+    const searchText = searchInput.value.toLowerCase();
+
+    const filteredProducts = products.filter(product =>
+        product.name.toLowerCase().includes(searchText) ||
+        product.category.toLowerCase().includes(searchText) ||
+        product.description.toLowerCase().includes(searchText)
+    );
+
+    displayProducts(filteredProducts);
+}
+
+
+// ==========================================
+// FILTER PRODUCTS BY CATEGORY
+// ==========================================
+
+function filterProducts() {
+
+    const categoryFilter = document.getElementById("category-filter");
+
+    if (!categoryFilter) return;
+
+    const selectedCategory = categoryFilter.value;
+
+    let filteredProducts = products;
+
+    if (selectedCategory !== "All") {
+
+        filteredProducts = products.filter(product =>
+            product.category === selectedCategory
+        );
+
+    }
+
+    const searchInput = document.getElementById("product-search");
+
+    if (searchInput && searchInput.value.trim() !== "") {
+
+        const searchText = searchInput.value.toLowerCase();
+
+        filteredProducts = filteredProducts.filter(product =>
+            product.name.toLowerCase().includes(searchText) ||
+            product.category.toLowerCase().includes(searchText) ||
+            product.description.toLowerCase().includes(searchText)
+        );
+
+    }
+
+    displayProducts(filteredProducts);
+}
+
+
+// ==========================================
+// ADD PRODUCT TO CART
+// ==========================================
+
+function addToCart(productId) {
+
+    const product = products.find(item => item.id === productId);
 
     if (!product) return;
 
-    const existingItem = cart.find(item => item.id === id);
+    const existingItem = cart.find(item => item.id === productId);
 
     if (existingItem) {
 
@@ -190,278 +182,218 @@ function addToCart(id) {
     } else {
 
         cart.push({
-
-            id: product.id,
-            name: product.name,
-            price: product.price,
+            ...product,
             quantity: 1
-
         });
 
     }
 
     updateCart();
 
+    alert(product.name + " added to your cart!");
 }
 
 
-// ========================================
-// 6. CHANGE PRODUCT QUANTITY
-// ========================================
+// ==========================================
+// CHANGE PRODUCT QUANTITY
+// ==========================================
 
-function changeQuantity(id, change) {
+function changeQuantity(productId, change) {
 
-    const item = cart.find(product => product.id === id);
+    const cartItem = cart.find(item => item.id === productId);
 
-    if (!item) return;
+    if (!cartItem) return;
 
-    item.quantity += change;
+    cartItem.quantity += change;
 
-    if (item.quantity <= 0) {
+    if (cartItem.quantity <= 0) {
 
-        removeFromCart(id);
-
-    } else {
-
-        updateCart();
+        removeFromCart(productId);
+        return;
 
     }
 
+    updateCart();
 }
 
 
-// ========================================
-// 7. REMOVE PRODUCT
-// ========================================
+// ==========================================
+// REMOVE PRODUCT FROM CART
+// ==========================================
 
-function removeFromCart(id) {
+function removeFromCart(productId) {
 
-    cart = cart.filter(item => item.id !== id);
+    cart = cart.filter(item => item.id !== productId);
 
     updateCart();
-
 }
 
 
-// ========================================
-// 8. UPDATE SHOPPING CART
-// ========================================
+// ==========================================
+// UPDATE CART DISPLAY
+// ==========================================
 
 function updateCart() {
 
-    const cartItems = document.getElementById("cart-items");
-
-    const cartCount = document.getElementById("cart-count");
-
+    const cartContainer = document.getElementById("cart-items");
     const cartTotal = document.getElementById("cart-total");
 
-    if (!cartItems || !cartCount || !cartTotal) return;
+    if (!cartContainer || !cartTotal) return;
 
-    const totalQuantity = cart.reduce(
-        (sum, item) => sum + item.quantity, 0
-    );
-
-    const totalAmount = cart.reduce(
-        (sum, item) => sum + item.price * item.quantity, 0
-    );
-
-    cartCount.textContent = totalQuantity;
-
-    cartTotal.textContent = "₹" + totalAmount;
+    cartContainer.innerHTML = "";
 
     if (cart.length === 0) {
 
-        cartItems.innerHTML = `
-            <p class="empty-message">
-                Your cart is empty.
-            </p>
-        `;
+        cartContainer.innerHTML = "<p>Your cart is empty.</p>";
+
+        cartTotal.textContent = "₹0";
 
         return;
-
     }
 
-    cartItems.innerHTML = cart.map(item => `
+    let total = 0;
 
-        <div class="cart-item">
+    cart.forEach(item => {
 
+        const itemTotal = item.price * item.quantity;
+
+        total += itemTotal;
+
+        const cartItem = document.createElement("div");
+
+        cartItem.className = "cart-item";
+
+        cartItem.innerHTML = `
             <div>
-                <p class="cart-item-name">
-                    ${item.name}
-                </p>
-
-                <p class="cart-item-price">
-                    ₹${item.price * item.quantity}
-                </p>
+                <h4>${item.name}</h4>
+                <p>₹${item.price} × ${item.quantity}</p>
             </div>
 
-            <div class="quantity-controls">
+            <div class="cart-controls">
 
-                <button
-                    onclick="changeQuantity(${item.id}, -1)"
-                    aria-label="Decrease quantity"
-                >−</button>
+                <button onclick="changeQuantity(${item.id}, -1)">
+                    -
+                </button>
 
                 <span>${item.quantity}</span>
 
-                <button
-                    onclick="changeQuantity(${item.id}, 1)"
-                    aria-label="Increase quantity"
-                >+</button>
+                <button onclick="changeQuantity(${item.id}, 1)">
+                    +
+                </button>
+
+                <button onclick="removeFromCart(${item.id})">
+                    Remove
+                </button>
 
             </div>
+        `;
 
-            <button
-                class="remove-button"
-                onclick="removeFromCart(${item.id})"
-            >
-                Remove
-            </button>
+        cartContainer.appendChild(cartItem);
 
-        </div>
+    });
 
-    `).join("");
-
+    cartTotal.textContent = "₹" + total;
 }
 
 
-// ========================================
-// 9. WHATSAPP ORDER CHECKOUT
-// ========================================
+// ==========================================
+// WHATSAPP ORDER CHECKOUT
+// ==========================================
 
 function placeOrder() {
 
-    // Check cart
-
     if (cart.length === 0) {
 
-        alert("Your shopping cart is empty. Please add products first.");
+        alert("Your cart is empty. Please add products first.");
 
         return;
-
     }
 
-    // Get customer information
+    if (SHOP_WHATSAPP_NUMBER === "91XXXXXXXXXX") {
 
-    const customerName =
-        document.getElementById("customer-name").value.trim();
+        alert("Please configure your shop WhatsApp number in script.js first.");
 
-    const customerPhone =
-        document.getElementById("customer-phone").value.trim();
+        return;
+    }
 
-    const customerAddress =
-        document.getElementById("customer-address").value.trim();
+    const customerName = document.getElementById("customer-name")?.value.trim();
 
+    const customerPhone = document.getElementById("customer-phone")?.value.trim();
 
-    // Validate customer information
+    const customerAddress = document.getElementById("customer-address")?.value.trim();
 
     if (!customerName || !customerPhone || !customerAddress) {
 
-        alert("Please complete all delivery details.");
+        alert("Please fill in your name, phone number and address.");
 
         return;
-
     }
 
-    const cleanPhone = customerPhone.replace(/\D/g, "");
-
-    if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
+    if (!/^[6-9]\d{9}$/.test(customerPhone)) {
 
         alert("Please enter a valid 10-digit Indian mobile number.");
 
         return;
-
     }
 
+    let total = 0;
 
-    // Check WhatsApp configuration
+    let message = "Hello Miniature World! I would like to place an order.\n\n";
 
-    if (!/^91\d{10}$/.test(SHOP_WHATSAPP_NUMBER)) {
+    message += "CUSTOMER DETAILS\n";
+    message += "Name: " + customerName + "\n";
+    message += "Phone: " + customerPhone + "\n";
+    message += "Address: " + customerAddress + "\n\n";
 
-        alert("Shop WhatsApp number is not configured yet.");
+    message += "ORDER DETAILS\n";
 
-        return;
+    cart.forEach(item => {
 
-    }
+        const itemTotal = item.price * item.quantity;
 
+        total += itemTotal;
 
-    // Prepare order details
-
-    let orderDetails = "";
-
-    cart.forEach((item, index) => {
-
-        orderDetails +=
-            `${index + 1}. ${item.name}\n` +
-            `   Quantity: ${item.quantity}\n` +
-            `   Price: ₹${item.price * item.quantity}\n\n`;
+        message += item.name + "\n";
+        message += "Quantity: " + item.quantity + "\n";
+        message += "Price: ₹" + itemTotal + "\n\n";
 
     });
 
+    message += "Total Amount: ₹" + total + "\n\n";
 
-    // Calculate final total
-
-    const totalAmount = cart.reduce(
-
-        (sum, item) => sum + item.price * item.quantity,
-
-        0
-
-    );
-
-
-    // Prepare WhatsApp message
-
-    const message =
-
-        `🛒 NEW ORDER - MINIATURE WORLD\n\n` +
-
-        `Customer Name: ${customerName}\n` +
-
-        `Mobile Number: ${customerPhone}\n\n` +
-
-        `Delivery Address:\n${customerAddress}\n\n` +
-
-        `ORDER DETAILS:\n\n${orderDetails}` +
-
-        `TOTAL AMOUNT: ₹${totalAmount}\n\n` +
-
-        `Please confirm my order. Thank you!`;
-
-
-    // Open WhatsApp
+    message += "Please confirm my order. Thank you!";
 
     const whatsappURL =
-
         "https://wa.me/" +
-
         SHOP_WHATSAPP_NUMBER +
-
         "?text=" +
-
         encodeURIComponent(message);
-
 
     window.open(whatsappURL, "_blank");
 
 }
 
 
-// ========================================
-// 10. SEARCH AND CATEGORY FILTER
-// ========================================
+// ==========================================
+// INITIALIZE WEBSITE
+// ==========================================
 
-document.getElementById("product-search")
-    .addEventListener("input", displayProducts);
+document.addEventListener("DOMContentLoaded", function () {
 
-document.getElementById("category-filter")
-    .addEventListener("change", displayProducts);
+    displayProducts();
 
+    updateCart();
 
-// ========================================
-// 11. INITIALIZE WEBSITE
-// ========================================
+    const searchInput = document.getElementById("product-search");
 
-displayProducts();
+    const categoryFilter = document.getElementById("category-filter");
 
-updateCart();
+    if (searchInput) {
+        searchInput.addEventListener("input", searchProducts);
+    }
+
+    if (categoryFilter) {
+        categoryFilter.addEventListener("change", filterProducts);
+    }
+
+});
